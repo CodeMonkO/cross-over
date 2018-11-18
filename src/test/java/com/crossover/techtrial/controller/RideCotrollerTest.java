@@ -1,9 +1,4 @@
-/**
- * 
- */
 package com.crossover.techtrial.controller;
-
-import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,18 +20,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.crossover.techtrial.model.Person;
 import com.crossover.techtrial.repositories.PersonRepository;
 
-/**
- * @author kshah
- *
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class PersonControllerTest {
+public class RideCotrollerTest {
 
 	MockMvc mockMvc;
 
 	@Mock
-	private PersonController personController;
+	private RideController rideController;
 
 	@Autowired
 	private TestRestTemplate template;
@@ -46,11 +37,11 @@ public class PersonControllerTest {
 
 	@Before
 	public void setup() throws Exception {
-		mockMvc = MockMvcBuilders.standaloneSetup(personController).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(rideController).build();
 	}
 
 	@Test
-	public void testPanelShouldBeRegistered() throws Exception {
+	public void newRideTest() throws Exception {
 		HttpEntity<Object> person = getHttpEntity("{\"name\": \"test 1\", \"email\": \"test10000000000001@gmail.com\","
 				+ " \"registrationNumber\": \"41DCT\",\"registrationDate\":\"2018-08-08T12:12:12\" }");
 		ResponseEntity<Person> response = template.postForEntity("/api/person", person, Person.class);
@@ -65,31 +56,4 @@ public class PersonControllerTest {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		return new HttpEntity<Object>(body, headers);
 	}
-
-	@Test
-	public void getAllPersonsTest() {
-		HttpEntity<Object> person = getHttpEntity("{\"name\": \"test 1\", \"email\": \"test10000000000001@gmail.com\","
-				+ " \"registrationNumber\": \"41DCT\",\"registrationDate\":\"2018-08-08T12:12:12\" }");
-		ResponseEntity<List> response = template.getForEntity("/api/person",List.class);
-		//Assert.assertEquals(true, response.getBody().isEmpty());
-		Assert.assertEquals(200, response.getStatusCode().value());
-	}
-	
-	@Test
-	public void getPersonByIdNegTest() {
-		HttpEntity<Object> person = getHttpEntity("{\"name\": \"test 1\", \"email\": \"test10000000000001@gmail.com\","
-				+ " \"registrationNumber\": \"41DCT\",\"registrationDate\":\"2018-08-08T12:12:12\" }");
-		ResponseEntity<Person> response = template.getForEntity("/api/person/0",Person.class);
-		Assert.assertEquals(null, response.getBody());
-	}
-	
-	@Test
-	public void getPersonByIdPosTest() {
-		HttpEntity<Object> person = getHttpEntity("{\"name\": \"test 1\", \"email\": \"test10000000000001@gmail.com\","
-				+ " \"registrationNumber\": \"41DCT\",\"registrationDate\":\"2018-08-08T12:12:12\" }");
-		ResponseEntity<Person> response = template.getForEntity("/api/person/1",Person.class);
-		Assert.assertEquals(1, response.getBody().getId().intValue());
-		Assert.assertEquals(200, response.getStatusCode().value());
-	}
-
 }
